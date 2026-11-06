@@ -1,0 +1,25 @@
+Excelente todo el modelo de componentes desarrollado hasta ahora, me gustaría aplicarlo a la lógiga de entidades y con el uso de namesapces de un pequeño videojuego de ta te ti usando fltk, ya tengo la línea para poder compilar este tipo de aplicación:
+
+g++ \
+-std=c++17 \
+-Wall \
+-ldl \
+-I./include \
+-I./include/vendors/fltk/include \
+-I./lib/FL \
+-L./include/vendors/fltk/lib/ \
+./src/*.cpp \
+-o ./tictactoe.exe \
+-lfltk \
+
+te anoto una serie de condiciones:
+- Estilo Allman (Llave abajo) en todo el código.
+- Los nombres de los archivos deberían tener la convención underscore y en minúscula para que sean compatibles entre sistemas de archivos Microsoft Windows y GNU/Linux.
+- Pasar el código a Inglés con comentarios en español. Los comentarios deben respetar el formato Doxygen y explicando en detalle cada concepto involucrado en cada función o sintaxis compleja.
+- Uso de RAII y SmartPointers.
+- Me gustaría que utilices siempre While para recorrer los contenedores para que sea más óptimo y buscar que sea eficiente. O en su defecto y vos pensás que es mejor usar el for range de C++ moderno.
+- Crear una clase Application o Game y separar toda la lógica del archivo main.cpp. Principalmente para que el main sea la inicialización estática de esa clase Application o Game, el nombre que te parezca más adecuado algo como un main simple:
+
+    Game game;
+    game.run();
+    return 0;
