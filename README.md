@@ -39,14 +39,12 @@ g++ \
 ./src/*.cpp \
 -o ./bin/tictactoe \
 -lfltk \
-
+-lpthread
 ```
 
 ### Ejecución
-
 ```bash
 ./bin/tictactoe
-
 ```
 
 ---
@@ -56,7 +54,6 @@ g++ \
 Los siguientes diagramas detallan la topología interna del software.
 
 ### 1. Diagrama Didáctico de Arquitectura
-
 Representa la jerarquía del flujo de dependencia. La interfaz gráfica (UI) consulta y modifica el estado del dominio, pero el dominio ignora por completo la existencia de FLTK.
 
 ```mermaid
@@ -73,11 +70,9 @@ flowchart TD
     subgraph Infraestructura Gráfica
         UI -.->|Maneja memoria RAII| FLTK[Bibliotecas FLTK]
     end
-
 ```
 
 ### 2. Diagrama de Clases
-
 Muestra las clases, su visibilidad y las firmas de métodos más importantes. Se destaca la encapsulación (atributos privados) y el uso de punteros inteligentes para recursos gráficos.
 
 ```mermaid
@@ -118,11 +113,9 @@ classDiagram
 
     Board --> Player : utiliza
     Game *-- Board : composición (1:1)
-
 ```
 
 ### 3. Diagrama de Secuencia (Flujo de un turno)
-
 Describe paso a paso qué ocurre cuando el usuario hace clic en un botón de la grilla gráfica durante la partida.
 
 ```mermaid
@@ -135,35 +128,12 @@ sequenceDiagram
 
     Usuario->>OS: Clic en Botón [Índice 4]
     OS->>FL: Evento de Puntero
-    FL->>G: button_callback_static(widget, user_data)Para el ícono, el formato SVG es ideal: al ser un gráfico vectorial basado en texto, pesa apenas unos bytes, escala a cualquier resolución sin perder calidad y puedes incluirlo directamente en tu repositorio sin necesidad de software de edición de imágenes.
-
-Crea un archivo llamado `icon.svg` dentro de tu nuevo directorio `media/` o `img/` y pega el siguiente código. Representa un diseño minimalista alineado con la filosofía de eficiencia y los colores de la paleta tradicional:
-
-```svg
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="200" height="200">
-  <!-- Fondo redondeado -->
-  <rect width="100" height="100" fill="#2c3e50" rx="15" />
-  
-  <!-- Grilla del Ta Te Ti -->
-  <line x1="33" y1="10" x2="33" y2="90" stroke="#27ae60" stroke-width="5" stroke-linecap="round" />
-  <line x1="66" y1="10" x2="66" y2="90" stroke="#27ae60" stroke-width="5" stroke-linecap="round" />
-  <line x1="10" y1="33" x2="90" y2="33" stroke="#27ae60" stroke-width="5" stroke-linecap="round" />
-  <line x1="10" y1="66" x2="90" y2="66" stroke="#27ae60" stroke-width="5" stroke-linecap="round" />
-  
-  <!-- Ficha X (Rojo) en la esquina superior izquierda -->
-  <line x1="15" y1="15" x2="28" y2="28" stroke="#e74c3c" stroke-width="5" stroke-linecap="round" />
-  <line x1="28" y1="15" x2="15" y2="28" stroke="#e74c3c" stroke-width="5" stroke-linecap="round" />
-  
-  <!-- Ficha O (Azul) en el centro -->
-  <circle cx="50" cy="50" r="8" stroke="#3498db" stroke-width="5" fill="none" />
-</svg>
-```
-
-A continuación, tienes el contenido completo del archivo `README.md`. He incrustado los tres diagramas solicitados utilizando **Mermaid.js**, un estándar soportado nativamente por GitHub para renderizar diagramas UML directamente desde el código fuente del Markdown.
-
----
-
-```markdown
+    FL->>G: button_callback_static(widget, user_data)
+    
+    Note right of FL: user_data se castea de vuelta a 'Game*'
+    
+    G->>G: handle_click(widget)
+    G->>B: make_move(4)
     
     alt El movimiento es válido (Celda vacía)
         B->>B: cells_[4] = current_turn_
@@ -182,9 +152,4 @@ A continuación, tienes el contenido completo del archivo `README.md`. He incrus
     else El movimiento es inválido (Celda ocupada)
         B-->>G: return false (Se ignora el clic)
     end
-
-```
-
-```
-
 ```
