@@ -1,4 +1,4 @@
-# <img src="media/icon.svg" width="50" height="50" align="center"> Ta Te Ti (Tic-Tac-Toe)
+# <img src="media/tictactoe.svg" width="50" height="50" align="center"> Ta Te Ti (Tic-Tac-Toe)
 
 Un videojuego clásico implementado con la filosofía **GREENSOFT**: máxima eficiencia computacional, separación de responsabilidades y un uso responsable de los recursos de hardware. 
 

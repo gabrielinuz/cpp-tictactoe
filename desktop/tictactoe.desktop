@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Ta Te Ti
+Comment=Videojuego Tic-Tac-Toe bajo el modelo GREENSOFT
+Exec=tictactoe
+Icon=tictactoe
+Terminal=false
+Categories=Game;BoardGame;
