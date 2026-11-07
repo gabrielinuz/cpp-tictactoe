@@ -38,8 +38,7 @@ g++ \
 -L./include/vendors/fltk/lib/ \
 ./src/*.cpp \
 -o ./bin/tictactoe \
--lfltk \
--lpthread
+-lfltk
 ```
 
 ### Ejecución
