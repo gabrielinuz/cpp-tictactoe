@@ -56,100 +56,14 @@ Los siguientes diagramas detallan la topología interna del software.
 ### 1. Diagrama Didáctico de Arquitectura
 Representa la jerarquía del flujo de dependencia. La interfaz gráfica (UI) consulta y modifica el estado del dominio, pero el dominio ignora por completo la existencia de FLTK.
 
-```mermaid
-flowchart TD
-    Host[main.cpp\nHost de Ejecución] -->|Instancia y Corre| UI[Game\nCapa de Presentación FLTK]
-    UI -->|Delega Reglas| Domain[tictactoe::Board\nLógica de Dominio]
-    
-    subgraph Dominio Puro [Independiente del SO]
-        Domain
-        Enum[tictactoe::Player\nEstados: Empty, X, O]
-        Domain -.-> Enum
-    end
-    
-    subgraph Infraestructura Gráfica
-        UI -.->|Maneja memoria RAII| FLTK[Bibliotecas FLTK]
-    end
-```
+![Diagrama de Arquitectura](media/diagrama_arquitectura.svg)
 
 ### 2. Diagrama de Clases
 Muestra las clases, su visibilidad y las firmas de métodos más importantes. Se destaca la encapsulación (atributos privados) y el uso de punteros inteligentes para recursos gráficos.
 
-```mermaid
-classDiagram
-    class Player {
-        <<enumeration>>
-        Empty
-        X
-        O
-    }
-
-    class Board {
-        -std::array~Player, 9~ cells_
-        -Player current_turn_
-        -Player winner_
-        -int moves_count_
-        -check_win_condition() void
-        +Board()
-        +reset() void
-        +make_move(index : int) bool
-        +get_cell(index : int) Player
-        +get_winner() Player
-        +is_draw() bool
-    }
-
-    class Game {
-        -std::unique_ptr~Fl_Window~ window_
-        -std::array~Fl_Button*, 9~ buttons_
-        -Board board_
-        -button_callback_static(widget : Fl_Widget*, user_data : void*)$ void
-        -handle_click(widget : Fl_Widget*) void
-        -update_ui() void
-        -check_game_over() void
-        +Game()
-        +~Game()
-        +run() int
-    }
-
-    Board --> Player : utiliza
-    Game *-- Board : composición (1:1)
-```
+![Diagrama de Clases](media/diagrama_clases.svg)
 
 ### 3. Diagrama de Secuencia (Flujo de un turno)
 Describe paso a paso qué ocurre cuando el usuario hace clic en un botón de la grilla gráfica durante la partida.
 
-```mermaid
-sequenceDiagram
-    actor Usuario
-    participant OS as Sistema Operativo (X11)
-    participant FL as FLTK (Motor Gráfico)
-    participant G as Game (Orquestador UI)
-    participant B as Board (Dominio)
-
-    Usuario->>OS: Clic en Botón [Índice 4]
-    OS->>FL: Evento de Puntero
-    FL->>G: button_callback_static(widget, user_data)
-    
-    Note right of FL: user_data se castea de vuelta a 'Game*'
-    
-    G->>G: handle_click(widget)
-    G->>B: make_move(4)
-    
-    alt El movimiento es válido (Celda vacía)
-        B->>B: cells_[4] = current_turn_
-        B->>B: check_win_condition()
-        B-->>G: return true
-        
-        G->>G: update_ui()
-        G->>FL: window_->redraw()
-        
-        G->>G: check_game_over()
-        alt Si hay ganador o empate
-            G->>FL: fl_message("X Wins!")
-            G->>B: reset()
-            G->>G: update_ui()
-        end
-    else El movimiento es inválido (Celda ocupada)
-        B-->>G: return false (Se ignora el clic)
-    end
-```
+![Diagrama de Secuencia](media/diagrama_secuencia.svg)
