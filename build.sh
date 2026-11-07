@@ -8,5 +8,5 @@ g++ \
 -I./lib/FL \
 -L./include/vendors/fltk/lib/ \
 ./src/*.cpp \
--o tictactoe.exe \
+-o tictactoe.app \
 -lfltk
